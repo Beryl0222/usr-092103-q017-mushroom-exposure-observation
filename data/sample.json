@@ -1,0 +1,9 @@
+{
+  "event_id": "092103-017-sample-001",
+  "event_type": "EXPOSURE_REPORTED",
+  "aggregate_type": "exposure_event",
+  "aggregate_id": "mushroom_exposure_observation-001",
+  "occurred_at": "2026-09-20T16:00:00+08:00",
+  "version": 1,
+  "summary": "毒蘑菇暴露留观联调样例"
+}
