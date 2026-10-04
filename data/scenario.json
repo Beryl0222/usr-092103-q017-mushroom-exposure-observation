@@ -1,0 +1,2007 @@
+{
+  "events": [
+    {
+      "event_id": "EV-001",
+      "event_type": "EXPOSURE_REPORTED",
+      "aggregate_type": "exposure_event",
+      "aggregate_id": "EXP-0920-FAM",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:10:00+08:00",
+      "version": 1,
+      "summary": "县医院上报家庭聚餐疑似毒蘑菇中毒，4 人暴露",
+      "payload": {
+        "meal": {
+          "meal_time": "2026-09-20T12:00:00+08:00",
+          "location": "某省某市某镇团结村3组张家",
+          "dish_names": [
+            "自采野生菌炒肉",
+            "野生菌汤"
+          ]
+        },
+        "reporter_facility_id": "F-COUNTY-01",
+        "suspected_species": {
+          "name": "疑似鹅膏属（白毒伞）",
+          "confidence": "SUSPECTED"
+        },
+        "source_trace": {
+          "gathering_type": "FAMILY_MEAL",
+          "exposed_count_reported": 4,
+          "purchase_site": "村后山林自采",
+          "region_code": "XX-YY-ZZZ"
+        }
+      },
+      "source_facility_id": "F-COUNTY-01",
+      "report_batch_id": "BATCH-0920-COUNTY"
+    },
+    {
+      "event_id": "EV-002",
+      "event_type": "EXPOSURE_REPORTED",
+      "aggregate_type": "exposure_event",
+      "aggregate_id": "EXP-0920-FAM-DUP",
+      "exposure_id": "EXP-0920-FAM-DUP",
+      "occurred_at": "2026-09-20T20:32:00+08:00",
+      "version": 1,
+      "summary": "市医院上报一同聚餐儿童中毒，疑似同一餐次",
+      "payload": {
+        "meal": {
+          "meal_time": "2026-09-20T12:00:00+08:00",
+          "location": "某省某市某镇团结村3组张家",
+          "dish_names": [
+            "自采野生菌炒肉",
+            "野生菌汤"
+          ]
+        },
+        "reporter_facility_id": "F-CITY-02",
+        "suspected_species": {
+          "name": "白毒伞待排查",
+          "confidence": "UNKNOWN"
+        },
+        "source_trace": {
+          "gathering_type": "FAMILY_MEAL",
+          "exposed_count_reported": 4
+        },
+        "duplicate_of_exposure_id": "EXP-0920-FAM"
+      },
+      "source_facility_id": "F-CITY-02",
+      "report_batch_id": "BATCH-0920-CITY"
+    },
+    {
+      "event_id": "EV-003",
+      "event_type": "EXPOSURE_MERGED",
+      "aggregate_type": "exposure_event",
+      "aggregate_id": "EXP-0920-FAM",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:05:00+08:00",
+      "version": 2,
+      "summary": "市医院重复上报并入同一暴露事件",
+      "payload": {
+        "surviving_exposure_id": "EXP-0920-FAM",
+        "merged_exposure_ids": [
+          "EXP-0920-FAM-DUP"
+        ],
+        "merge_basis": [
+          {
+            "kind": "SAME_MEAL_TIME_PLACE",
+            "detail": "两院上报餐次均为 2026-09-20 12:00 团结村3组张家"
+          },
+          {
+            "kind": "SAME_PATIENT_IDENTITY",
+            "detail": "市医院患儿 P-0920-C 与县医院登记的同桌人员为同一人"
+          }
+        ],
+        "merged_at": "2026-09-20T21:05:00+08:00",
+        "decided_by": "STAFF-CDC-LI"
+      },
+      "source_facility_id": "CDC-REGIONAL"
+    },
+    {
+      "event_id": "EV-004",
+      "event_type": "COURSE_OPENED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:15:00+08:00",
+      "version": 1,
+      "summary": "患者 A（张某，男 52）县医院建档",
+      "payload": {
+        "patient": {
+          "patient_id": "P-0920-A",
+          "initials": "张*",
+          "age": 52,
+          "sex": "M"
+        },
+        "facility_id": "F-COUNTY-01",
+        "role_in_meal": "DINER",
+        "ate_mushroom_dish": true,
+        "first_bite_at": "2026-09-20T12:00:00+08:00",
+        "latent_period_minutes": 390
+      },
+      "source_facility_id": "F-COUNTY-01"
+    },
+    {
+      "event_id": "EV-005",
+      "event_type": "COURSE_OPENED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:18:00+08:00",
+      "version": 1,
+      "summary": "患者 B（李某，女 48）县医院建档",
+      "payload": {
+        "patient": {
+          "patient_id": "P-0920-B",
+          "initials": "李*",
+          "age": 48,
+          "sex": "F"
+        },
+        "facility_id": "F-COUNTY-01",
+        "role_in_meal": "DINER",
+        "ate_mushroom_dish": true,
+        "first_bite_at": "2026-09-20T12:00:00+08:00",
+        "latent_period_minutes": 420
+      },
+      "source_facility_id": "F-COUNTY-01"
+    },
+    {
+      "event_id": "EV-006",
+      "event_type": "COURSE_OPENED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-C",
+      "exposure_id": "EXP-0920-FAM-DUP",
+      "occurred_at": "2026-09-20T20:40:00+08:00",
+      "version": 1,
+      "summary": "患儿 C（张某之子，10 岁）市医院建档（合并前挂在重复编号下，记录保留）",
+      "payload": {
+        "patient": {
+          "patient_id": "P-0920-C",
+          "initials": "张*某",
+          "age": 10,
+          "sex": "M"
+        },
+        "facility_id": "F-CITY-02",
+        "role_in_meal": "DINER",
+        "ate_mushroom_dish": true,
+        "first_bite_at": "2026-09-20T12:10:00+08:00",
+        "latent_period_minutes": 400
+      },
+      "source_facility_id": "F-CITY-02"
+    },
+    {
+      "event_id": "EV-007",
+      "event_type": "PERSON_RELATION_LINKED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:45:00+08:00",
+      "version": 4,
+      "summary": "同桌风险通知关联（A-B）：仅告警，不共享病历",
+      "payload": {
+        "subject_patient_id": "P-0920-A",
+        "related_patient_id": "P-0920-B",
+        "relation": "CO_DINER",
+        "consent_scope": "CO_DINER_ALERT_ONLY",
+        "alert_message_ref": "TPL-CO-DINER-MUSHROOM-ALERT-V1"
+      }
+    },
+    {
+      "event_id": "EV-008",
+      "event_type": "PERSON_RELATION_LINKED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:46:00+08:00",
+      "version": 5,
+      "summary": "同桌风险通知关联（A-C）：仅告警，不共享病历",
+      "payload": {
+        "subject_patient_id": "P-0920-A",
+        "related_patient_id": "P-0920-C",
+        "relation": "CO_DINER",
+        "consent_scope": "CO_DINER_ALERT_ONLY",
+        "alert_message_ref": "TPL-CO-DINER-MUSHROOM-ALERT-V1"
+      }
+    },
+    {
+      "event_id": "EV-009",
+      "event_type": "PERSON_RELATION_LINKED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:47:00+08:00",
+      "version": 4,
+      "summary": "同桌风险通知关联（B-C）：仅告警，不共享病历",
+      "payload": {
+        "subject_patient_id": "P-0920-B",
+        "related_patient_id": "P-0920-C",
+        "relation": "CO_DINER",
+        "consent_scope": "CO_DINER_ALERT_ONLY",
+        "alert_message_ref": "TPL-CO-DINER-MUSHROOM-ALERT-V1"
+      }
+    },
+    {
+      "event_id": "EV-010",
+      "event_type": "SYMPTOM_RECORDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:20:00+08:00",
+      "version": 2,
+      "summary": "A：18:30 起呕吐、腹泻",
+      "payload": {
+        "symptoms": [
+          {
+            "name": "VOMITING",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-20T18:30:00+08:00"
+          },
+          {
+            "name": "DIARRHEA",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-20T18:40:00+08:00"
+          }
+        ],
+        "recorded_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-011",
+      "event_type": "SYMPTOM_RECORDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:25:00+08:00",
+      "version": 2,
+      "summary": "B：19:00 起呕吐",
+      "payload": {
+        "symptoms": [
+          {
+            "name": "VOMITING",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-20T19:00:00+08:00"
+          }
+        ],
+        "recorded_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-012",
+      "event_type": "SYMPTOM_RECORDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-C",
+      "exposure_id": "EXP-0920-FAM-DUP",
+      "occurred_at": "2026-09-20T20:42:00+08:00",
+      "version": 2,
+      "summary": "C：18:50 起恶心呕吐",
+      "payload": {
+        "symptoms": [
+          {
+            "name": "NAUSEA",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-20T18:50:00+08:00"
+          },
+          {
+            "name": "VOMITING",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-20T19:10:00+08:00"
+          }
+        ],
+        "recorded_by": "STAFF-CITY-ZHAO"
+      }
+    },
+    {
+      "event_id": "EV-013",
+      "event_type": "OBSERVATION_REQUIRED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:30:00+08:00",
+      "version": 3,
+      "summary": "A：建立留观，要求至 09-22 12:00",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "state": "UNDER_OBSERVATION",
+        "required_until": "2026-09-22T12:00:00+08:00",
+        "observing_facility_id": "F-COUNTY-01",
+        "rationale": [
+          "LATENT_OVER_6H_RISK",
+          "SUSPECTED_AMANITIN",
+          "CO_DINER_SEVERE_CASE"
+        ],
+        "set_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-014",
+      "event_type": "OBSERVATION_REQUIRED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:35:00+08:00",
+      "version": 3,
+      "summary": "B：建立留观，要求至 09-22 12:00",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "state": "UNDER_OBSERVATION",
+        "required_until": "2026-09-22T12:00:00+08:00",
+        "observing_facility_id": "F-COUNTY-01",
+        "rationale": [
+          "LATENT_OVER_6H_RISK",
+          "SUSPECTED_AMANITIN"
+        ],
+        "set_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-015",
+      "event_type": "OBSERVATION_REQUIRED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-C",
+      "exposure_id": "EXP-0920-FAM-DUP",
+      "occurred_at": "2026-09-20T20:50:00+08:00",
+      "version": 3,
+      "summary": "C：市医院建立留观，要求至 09-22 12:00",
+      "payload": {
+        "patient_id": "P-0920-C",
+        "state": "UNDER_OBSERVATION",
+        "required_until": "2026-09-22T12:00:00+08:00",
+        "observing_facility_id": "F-CITY-02",
+        "rationale": [
+          "LATENT_OVER_6H_RISK",
+          "SUSPECTED_AMANITIN"
+        ],
+        "set_by": "STAFF-CITY-ZHAO"
+      }
+    },
+    {
+      "event_id": "EV-016",
+      "event_type": "SPECIMEN_COLLECTED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-MUSH-01",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:15:00+08:00",
+      "version": 1,
+      "summary": "家属送来的剩余野生蘑菇",
+      "payload": {
+        "specimen_id": "SP-MUSH-01",
+        "patient_id": "P-0920-A",
+        "material": "LEFTOVER_MUSHROOM",
+        "collected_at": "2026-09-20T20:15:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "seal": {
+          "seal_id": "SEAL-M1",
+          "sealed_by": "STAFF-COUNTY-NURSE1",
+          "seal_intact_at_collection": true,
+          "photo_ref": "MEDIA/SEAL-M1.jpg"
+        }
+      }
+    },
+    {
+      "event_id": "EV-017",
+      "event_type": "SPECIMEN_COLLECTED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-BLOOD-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:40:00+08:00",
+      "version": 1,
+      "summary": "A 首管血样",
+      "payload": {
+        "specimen_id": "SP-BLOOD-A-1",
+        "patient_id": "P-0920-A",
+        "material": "BLOOD",
+        "collected_at": "2026-09-20T20:40:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "seal": {
+          "seal_id": "SEAL-A1",
+          "sealed_by": "STAFF-COUNTY-NURSE1",
+          "seal_intact_at_collection": true
+        }
+      }
+    },
+    {
+      "event_id": "EV-018",
+      "event_type": "SPECIMEN_COLLECTED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-VOM-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T20:45:00+08:00",
+      "version": 1,
+      "summary": "B 呕吐物（与剩余蘑菇同源留样）",
+      "payload": {
+        "specimen_id": "SP-VOM-B-1",
+        "patient_id": "P-0920-B",
+        "material": "VOMITUS",
+        "collected_at": "2026-09-20T20:45:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "seal": {
+          "seal_id": "SEAL-B1",
+          "sealed_by": "STAFF-COUNTY-NURSE1",
+          "seal_intact_at_collection": true
+        },
+        "parent_specimen_id": "SP-MUSH-01"
+      }
+    },
+    {
+      "event_id": "EV-019",
+      "event_type": "SPECIMEN_COLLECTED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-BLOOD-C-1",
+      "exposure_id": "EXP-0920-FAM-DUP",
+      "occurred_at": "2026-09-20T20:55:00+08:00",
+      "version": 1,
+      "summary": "C 首管血样（市医院）",
+      "payload": {
+        "specimen_id": "SP-BLOOD-C-1",
+        "patient_id": "P-0920-C",
+        "material": "BLOOD",
+        "collected_at": "2026-09-20T20:55:00+08:00",
+        "facility_id": "F-CITY-02",
+        "seal": {
+          "seal_id": "SEAL-C1",
+          "sealed_by": "STAFF-CITY-NURSE2",
+          "seal_intact_at_collection": true
+        }
+      }
+    },
+    {
+      "event_id": "EV-020",
+      "event_type": "SPECIMEN_SPLIT_PREPARED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-MUSH-01",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:10:00+08:00",
+      "version": 2,
+      "summary": "剩余蘑菇拆分送检：本院、区域毒理实验室、疾控各一支",
+      "payload": {
+        "parent_specimen_id": "SP-MUSH-01",
+        "child_specimens": [
+          {
+            "specimen_id": "SP-MUSH-01-LOCAL",
+            "purpose": "LOCAL_LAB",
+            "seal": {
+              "seal_id": "SEAL-M1L",
+              "sealed_by": "STAFF-COUNTY-WANG"
+            },
+            "volume_or_mass": "约20g"
+          },
+          {
+            "specimen_id": "SP-MUSH-01-TOX",
+            "purpose": "REGIONAL_TOX_LAB",
+            "seal": {
+              "seal_id": "SEAL-M1T",
+              "sealed_by": "STAFF-COUNTY-WANG"
+            },
+            "volume_or_mass": "约30g"
+          },
+          {
+            "specimen_id": "SP-MUSH-01-CDC",
+            "purpose": "CDC_REFERENCE",
+            "seal": {
+              "seal_id": "SEAL-M1C",
+              "sealed_by": "STAFF-CDC-LI"
+            },
+            "volume_or_mass": "约30g"
+          }
+        ],
+        "split_at": "2026-09-20T21:10:00+08:00",
+        "split_by": "STAFF-COUNTY-WANG"
+      },
+      "correlation_id": "SPLIT-0920-01"
+    },
+    {
+      "event_id": "EV-021",
+      "event_type": "SPECIMEN_TRANSFERRED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "XFER-0920-01",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:20:00+08:00",
+      "version": 1,
+      "summary": "毒理分支由疾控冷链寄送区域中心",
+      "payload": {
+        "specimen_ids": [
+          "SP-MUSH-01-TOX"
+        ],
+        "from_facility_id": "F-COUNTY-01",
+        "to_facility_id": "F-REGIONAL-PC",
+        "transferred_at": "2026-09-20T21:20:00+08:00",
+        "transferred_by": "STAFF-COUNTY-WANG",
+        "seal_ids": [
+          "SEAL-M1T"
+        ],
+        "carrier": {
+          "type": "CDC_COURIER",
+          "tracking_no": "CDC-COLD-7741"
+        }
+      },
+      "correlation_id": "SPLIT-0920-01"
+    },
+    {
+      "event_id": "EV-022",
+      "event_type": "SPECIMEN_RECEIVED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "XFER-0920-01",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:50:00+08:00",
+      "version": 2,
+      "summary": "区域中心签收毒理分支，封签完好",
+      "payload": {
+        "specimen_ids": [
+          "SP-MUSH-01-TOX"
+        ],
+        "receiving_facility_id": "F-REGIONAL-PC",
+        "received_at": "2026-09-20T21:50:00+08:00",
+        "received_by": "STAFF-REGIONAL-LAB1",
+        "seal_checks": [
+          {
+            "specimen_id": "SP-MUSH-01-TOX",
+            "seal_id": "SEAL-M1T",
+            "intact": true
+          }
+        ]
+      },
+      "correlation_id": "SPLIT-0920-01"
+    },
+    {
+      "event_id": "EV-023",
+      "event_type": "SPECIMEN_SEAL_VERIFIED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "SP-MUSH-01-TOX",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:55:00+08:00",
+      "version": 1,
+      "summary": "区域中心独立复核封签与拆检谱系一致",
+      "payload": {
+        "specimen_id": "SP-MUSH-01-TOX",
+        "seal_id": "SEAL-M1T",
+        "intact": true,
+        "verified_at": "2026-09-20T21:55:00+08:00",
+        "verified_by": "STAFF-REGIONAL-LAB1"
+      },
+      "correlation_id": "SPLIT-0920-01"
+    },
+    {
+      "event_id": "EV-024",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-20T21:00:00+08:00",
+      "version": 1,
+      "summary": "A 入院首轮肝肾指标基本正常",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "specimen_id": "SP-BLOOD-A-1",
+        "drawn_at": "2026-09-20T20:45:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 32,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 28,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 70,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-025",
+      "event_type": "SYMPTOM_PAUSED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T02:00:00+08:00",
+      "version": 5,
+      "summary": "B：呕吐暂缓（疑似假愈期），留观不解除",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "paused_symptoms": [
+          "VOMITING"
+        ],
+        "expected_resurgence_window": {
+          "from": "2026-09-21T02:00:00+08:00",
+          "until": "2026-09-21T20:00:00+08:00"
+        },
+        "recorded_by": "STAFF-COUNTY-WANG",
+        "warning_given": true
+      }
+    },
+    {
+      "event_id": "EV-026",
+      "event_type": "OBSERVATION_LEFT_AGAINST_ADVICE",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T08:30:00+08:00",
+      "version": 6,
+      "summary": "B 自觉症状消失，自行签字离院；留观责任不闭环",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "state": "LEFT_AGAINST_ADVICE",
+        "left_at": "2026-09-21T08:30:00+08:00",
+        "warning_delivered": {
+          "contents": [
+            "FALSE_RECOVERY_EXPLAINED",
+            "RETURN_IF_SYMPTOMS_RETURN",
+            "LIVER_KIDNEY_RISK",
+            "FOLLOWUP_OBLIGATION"
+          ],
+          "delivered_by": "STAFF-COUNTY-WANG",
+          "signed_ref": "FORM-LAA-0920-B"
+        },
+        "open_liability": {
+          "observation_still_due": true,
+          "followup_still_due": true,
+          "contact_plan": {
+            "channel": "SMS",
+            "next_attempt_at": "2026-09-21T12:00:00+08:00"
+          }
+        }
+      }
+    },
+    {
+      "event_id": "EV-027",
+      "event_type": "SYMPTOM_RECORDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T05:30:00+08:00",
+      "version": 6,
+      "summary": "A：出现皮肤巩膜黄染、乏力",
+      "payload": {
+        "symptoms": [
+          {
+            "name": "JAUNDICE",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-21T05:00:00+08:00"
+          },
+          {
+            "name": "FATIGUE",
+            "status": "ACTIVE"
+          }
+        ],
+        "recorded_by": "STAFF-COUNTY-NIGHT2"
+      }
+    },
+    {
+      "event_id": "EV-028",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-A-2",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T06:00:00+08:00",
+      "version": 1,
+      "summary": "A 复查肝酶急升，ALT/AST 达危急值",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "specimen_id": "SP-BLOOD-A-1",
+        "drawn_at": "2026-09-21T05:45:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 420,
+            "unit": "U/L",
+            "critical": true,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 510,
+            "unit": "U/L",
+            "critical": true,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 92,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-029",
+      "event_type": "CRITICAL_ALERT_RAISED",
+      "aggregate_type": "critical_alert",
+      "aggregate_id": "ALERT-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T06:05:00+08:00",
+      "version": 1,
+      "summary": "A：ALT 420 超危急阈值，提醒主治与中毒中心值班",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "lab_panel_id": "LP-A-2",
+        "metric_code": "ALT",
+        "value": 420,
+        "unit": "U/L",
+        "threshold": 400,
+        "raised_at": "2026-09-21T06:05:00+08:00",
+        "deliver_to_roles": [
+          "ATTENDING_PHYSICIAN",
+          "ON_CALL_POISON_CENTER"
+        ],
+        "auto_close_forbidden": true
+      },
+      "causation_id": "EV-028"
+    },
+    {
+      "event_id": "EV-030",
+      "event_type": "CRITICAL_ALERT_ACKNOWLEDGED",
+      "aggregate_type": "critical_alert",
+      "aggregate_id": "ALERT-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T06:12:00+08:00",
+      "version": 2,
+      "summary": "县医院主治确认危急值，决定升级救治并联系区域中心",
+      "payload": {
+        "alert_id": "ALERT-A-1",
+        "acknowledged_by": "STAFF-COUNTY-WANG",
+        "acknowledged_at": "2026-09-21T06:12:00+08:00",
+        "clinical_decision": {
+          "decision": "ESCALATE_CARE",
+          "note": "肝损伤进展快，启动水飞蓟素，申请转区域中毒救治中心"
+        }
+      },
+      "causation_id": "EV-029"
+    },
+    {
+      "event_id": "EV-031",
+      "event_type": "TREATMENT_ORDERED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T06:20:00+08:00",
+      "version": 7,
+      "summary": "A：活性炭、补液、水飞蓟素",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "orders": [
+          {
+            "code": "ACTIVATED_CHARCOAL",
+            "status": "STARTED",
+            "started_at": "2026-09-21T06:15:00+08:00",
+            "dose": "50g"
+          },
+          {
+            "code": "IV_FLUID",
+            "status": "STARTED",
+            "started_at": "2026-09-21T06:10:00+08:00"
+          },
+          {
+            "code": "SILIBININ",
+            "status": "ORDERED",
+            "dose": "按方案"
+          }
+        ],
+        "ordered_by": "STAFF-COUNTY-WANG",
+        "ordered_at": "2026-09-21T06:20:00+08:00",
+        "based_on_lab_panel_id": "LP-A-2"
+      }
+    },
+    {
+      "event_id": "EV-032",
+      "event_type": "OBSERVATION_EXTENDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T06:25:00+08:00",
+      "version": 8,
+      "summary": "A：肝酶危急，留观延长至 09-23 12:00",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "state": "EXTENDED",
+        "previous_until": "2026-09-22T12:00:00+08:00",
+        "extended_until": "2026-09-23T12:00:00+08:00",
+        "reason": {
+          "kind": "CRITICAL_ALERT",
+          "ref_event_id": "EV-029",
+          "detail": "ALT/AST 危急值，多器官损伤风险"
+        },
+        "set_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-033",
+      "event_type": "HANDOFF_INITIATED",
+      "aggregate_type": "care_handoff",
+      "aggregate_id": "HO-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T10:00:00+08:00",
+      "version": 1,
+      "summary": "A：县医院发起向区域中毒救治中心的交接",
+      "payload": {
+        "handoff_id": "HO-A-1",
+        "patient_id": "P-0920-A",
+        "from_facility_id": "F-COUNTY-01",
+        "to_facility_id": "F-REGIONAL-PC",
+        "initiated_at": "2026-09-21T10:00:00+08:00",
+        "reason": "SPECIALIST_CENTER",
+        "package": {
+          "records": [
+            {
+              "kind": "EXPOSURE",
+              "event_id": "EV-001"
+            },
+            {
+              "kind": "CDC_SOURCE",
+              "event_id": "EV-001"
+            },
+            {
+              "kind": "COURSE",
+              "event_id": "EV-004"
+            },
+            {
+              "kind": "SYMPTOM_TIMELINE",
+              "event_id": "EV-010"
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-A-1"
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-A-2"
+            },
+            {
+              "kind": "TREATMENT",
+              "event_id": "EV-031"
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-013"
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-032"
+            }
+          ],
+          "specimens": [
+            {
+              "specimen_id": "SP-BLOOD-A-1",
+              "seal_id": "SEAL-A1",
+              "status": "IN_TRANSIT"
+            },
+            {
+              "specimen_id": "SP-MUSH-01-TOX",
+              "seal_id": "SEAL-M1T",
+              "status": "RESULT_PENDING"
+            }
+          ],
+          "open_actions": [
+            {
+              "action_code": "CONTINUE_OBSERVATION_UNTIL",
+              "due_at": "2026-09-23T12:00:00+08:00",
+              "status": "OPEN"
+            },
+            {
+              "action_code": "REPEAT_LIVER_KIDNEY_LABS",
+              "due_at": "2026-09-21T12:30:00+08:00",
+              "status": "OPEN"
+            },
+            {
+              "action_code": "AWAIT_TOX_RESULT",
+              "due_at": "2026-09-21T18:00:00+08:00",
+              "status": "OPEN"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "EV-034",
+      "event_type": "SPECIMEN_TRANSFERRED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "XFER-0921-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T10:10:00+08:00",
+      "version": 1,
+      "summary": "A 血样随救护车专人转送区域中心",
+      "payload": {
+        "specimen_ids": [
+          "SP-BLOOD-A-1"
+        ],
+        "from_facility_id": "F-COUNTY-01",
+        "to_facility_id": "F-REGIONAL-PC",
+        "transferred_at": "2026-09-21T10:10:00+08:00",
+        "transferred_by": "STAFF-COUNTY-EMS1",
+        "seal_ids": [
+          "SEAL-A1"
+        ],
+        "carrier": {
+          "type": "STAFF_HANDCARRY",
+          "tracking_no": "AMB-226"
+        }
+      }
+    },
+    {
+      "event_id": "EV-035",
+      "event_type": "SPECIMEN_RECEIVED",
+      "aggregate_type": "specimen_chain",
+      "aggregate_id": "XFER-0921-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T11:05:00+08:00",
+      "version": 2,
+      "summary": "区域中心签收 A 血样，封签完好",
+      "payload": {
+        "specimen_ids": [
+          "SP-BLOOD-A-1"
+        ],
+        "receiving_facility_id": "F-REGIONAL-PC",
+        "received_at": "2026-09-21T11:05:00+08:00",
+        "received_by": "STAFF-REGIONAL-NURSE3",
+        "seal_checks": [
+          {
+            "specimen_id": "SP-BLOOD-A-1",
+            "seal_id": "SEAL-A1",
+            "intact": true
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-036",
+      "event_type": "HANDOFF_ACKNOWLEDGED",
+      "aggregate_type": "care_handoff",
+      "aggregate_id": "HO-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T11:20:00+08:00",
+      "version": 2,
+      "summary": "区域中心主治逐项确认资料、样本与待办，接收 A",
+      "payload": {
+        "handoff_id": "HO-A-1",
+        "acknowledged_at": "2026-09-21T11:20:00+08:00",
+        "acknowledged_by": {
+          "receiving_facility_id": "F-REGIONAL-PC",
+          "physician_id": "STAFF-REGIONAL-CHEN"
+        },
+        "confirmations": {
+          "records_received": [
+            {
+              "kind": "EXPOSURE",
+              "event_id": "EV-001",
+              "present": true
+            },
+            {
+              "kind": "CDC_SOURCE",
+              "event_id": "EV-001",
+              "present": true
+            },
+            {
+              "kind": "COURSE",
+              "event_id": "EV-004",
+              "present": true
+            },
+            {
+              "kind": "SYMPTOM_TIMELINE",
+              "event_id": "EV-010",
+              "present": true
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-A-1",
+              "present": true
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-A-2",
+              "present": true
+            },
+            {
+              "kind": "TREATMENT",
+              "event_id": "EV-031",
+              "present": true
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-013",
+              "present": true
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-032",
+              "present": true
+            }
+          ],
+          "specimens_accounted": [
+            {
+              "specimen_id": "SP-BLOOD-A-1",
+              "seal_id": "SEAL-A1",
+              "seal_intact": true,
+              "accounted": true
+            },
+            {
+              "specimen_id": "SP-MUSH-01-TOX",
+              "seal_id": "SEAL-M1T",
+              "seal_intact": true,
+              "accounted": true
+            }
+          ],
+          "open_actions_accepted": [
+            {
+              "action_code": "CONTINUE_OBSERVATION_UNTIL",
+              "accepted": true,
+              "due_at": "2026-09-23T12:00:00+08:00"
+            },
+            {
+              "action_code": "REPEAT_LIVER_KIDNEY_LABS",
+              "accepted": true,
+              "due_at": "2026-09-21T12:30:00+08:00"
+            },
+            {
+              "action_code": "AWAIT_TOX_RESULT",
+              "accepted": true,
+              "due_at": "2026-09-21T18:00:00+08:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "EV-037",
+      "event_type": "TOXICOLOGY_RESULTED",
+      "aggregate_type": "tox_result",
+      "aggregate_id": "TOX-M1T-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T14:00:00+08:00",
+      "version": 1,
+      "summary": "区域毒理实验室：剩余蘑菇检出 α-鹅膏毒肽",
+      "payload": {
+        "specimen_id": "SP-MUSH-01-TOX",
+        "results": [
+          {
+            "analyte": "AMATOXIN_ALPHA_AMANITIN",
+            "detected": true,
+            "concentration": "检出（定量见附件）",
+            "method": "LC_MS_MS",
+            "result_status": "CONFIRMED"
+          },
+          {
+            "analyte": "AMATOXIN_BETA_AMANITIN",
+            "detected": true,
+            "concentration": "检出",
+            "method": "LC_MS_MS",
+            "result_status": "CONFIRMED"
+          }
+        ],
+        "reported_at": "2026-09-21T14:00:00+08:00",
+        "lab_facility_id": "F-REGIONAL-PC",
+        "lineage": {
+          "root_specimen_id": "SP-MUSH-01",
+          "parent_specimen_id": "SP-MUSH-01",
+          "seal_id": "SEAL-M1T",
+          "split_batch_correlation_id": "SPLIT-0920-01"
+        }
+      },
+      "correlation_id": "SPLIT-0920-01"
+    },
+    {
+      "event_id": "EV-038",
+      "event_type": "TREATMENT_ORDERED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T14:30:00+08:00",
+      "version": 9,
+      "summary": "A：毒理确诊后继续水飞蓟素并安排血液净化评估",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "orders": [
+          {
+            "code": "SILIBININ",
+            "status": "STARTED",
+            "started_at": "2026-09-21T14:30:00+08:00",
+            "dose": "按方案维持"
+          },
+          {
+            "code": "BLOOD_PURIFICATION",
+            "status": "ORDERED"
+          },
+          {
+            "code": "LIVER_TRANSPLANT_EVAL",
+            "status": "ORDERED"
+          }
+        ],
+        "ordered_by": "STAFF-REGIONAL-CHEN",
+        "ordered_at": "2026-09-21T14:30:00+08:00",
+        "based_on_tox_result_id": "TOX-M1T-1"
+      }
+    },
+    {
+      "event_id": "EV-039",
+      "event_type": "SYMPTOM_RECORDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T15:40:00+08:00",
+      "version": 7,
+      "summary": "B：居家再次呕吐、尿色加深，短信召回后返院",
+      "payload": {
+        "symptoms": [
+          {
+            "name": "VOMITING",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-21T15:00:00+08:00"
+          },
+          {
+            "name": "OLIGURIA",
+            "status": "ACTIVE",
+            "onset_at": "2026-09-21T15:20:00+08:00"
+          }
+        ],
+        "recorded_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-040",
+      "event_type": "OBSERVATION_RETURNED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T16:20:00+08:00",
+      "version": 8,
+      "summary": "B：症状反复返院，恢复留观",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "state": "RETURNED_TO_OBSERVATION",
+        "returned_at": "2026-09-21T16:20:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "trigger": {
+          "kind": "SYMPTOM_RESURGENCE"
+        }
+      }
+    },
+    {
+      "event_id": "EV-041",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T16:40:00+08:00",
+      "version": 1,
+      "summary": "B 复查 ALT 470，达危急值",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "drawn_at": "2026-09-21T16:30:00+08:00",
+        "facility_id": "F-COUNTY-01",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 470,
+            "unit": "U/L",
+            "critical": true,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 380,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 132,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-042",
+      "event_type": "CRITICAL_ALERT_RAISED",
+      "aggregate_type": "critical_alert",
+      "aggregate_id": "ALERT-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T16:45:00+08:00",
+      "version": 1,
+      "summary": "B：ALT 470 危急，提醒主治与中毒中心",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "lab_panel_id": "LP-B-1",
+        "metric_code": "ALT",
+        "value": 470,
+        "unit": "U/L",
+        "threshold": 400,
+        "raised_at": "2026-09-21T16:45:00+08:00",
+        "deliver_to_roles": [
+          "ATTENDING_PHYSICIAN",
+          "ON_CALL_POISON_CENTER"
+        ],
+        "auto_close_forbidden": true
+      },
+      "causation_id": "EV-041"
+    },
+    {
+      "event_id": "EV-043",
+      "event_type": "CRITICAL_ALERT_ACKNOWLEDGED",
+      "aggregate_type": "critical_alert",
+      "aggregate_id": "ALERT-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T16:50:00+08:00",
+      "version": 2,
+      "summary": "医生确认 B 的危急值，决定延长留观并转区域中心",
+      "payload": {
+        "alert_id": "ALERT-B-1",
+        "acknowledged_by": "STAFF-COUNTY-WANG",
+        "acknowledged_at": "2026-09-21T16:50:00+08:00",
+        "clinical_decision": {
+          "decision": "TRANSFER",
+          "note": "假愈期后肝损明确，转区域中心接续治疗"
+        }
+      },
+      "causation_id": "EV-042"
+    },
+    {
+      "event_id": "EV-044",
+      "event_type": "OBSERVATION_EXTENDED",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T16:52:00+08:00",
+      "version": 9,
+      "summary": "B：危急值 + 毒理阳性，留观延长至 09-23 18:00",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "state": "EXTENDED",
+        "previous_until": "2026-09-22T12:00:00+08:00",
+        "extended_until": "2026-09-23T18:00:00+08:00",
+        "reason": {
+          "kind": "TOX_POSITIVE",
+          "ref_event_id": "EV-037",
+          "detail": "同桌剩余蘑菇 α-鹅膏毒肽阳性，本人肝酶危急"
+        },
+        "set_by": "STAFF-COUNTY-WANG"
+      }
+    },
+    {
+      "event_id": "EV-045",
+      "event_type": "HANDOFF_INITIATED",
+      "aggregate_type": "care_handoff",
+      "aggregate_id": "HO-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T17:30:00+08:00",
+      "version": 1,
+      "summary": "B：县医院发起交接（含自行离院与召回记录）",
+      "payload": {
+        "handoff_id": "HO-B-1",
+        "patient_id": "P-0920-B",
+        "from_facility_id": "F-COUNTY-01",
+        "to_facility_id": "F-REGIONAL-PC",
+        "initiated_at": "2026-09-21T17:30:00+08:00",
+        "reason": "CRITICAL_ESCALATION",
+        "package": {
+          "records": [
+            {
+              "kind": "EXPOSURE",
+              "event_id": "EV-001"
+            },
+            {
+              "kind": "COURSE",
+              "event_id": "EV-005"
+            },
+            {
+              "kind": "SYMPTOM_TIMELINE",
+              "event_id": "EV-011"
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-014"
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-026"
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-044"
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-B-1"
+            }
+          ],
+          "specimens": [
+            {
+              "specimen_id": "SP-VOM-B-1",
+              "seal_id": "SEAL-B1",
+              "status": "RETAINED_AT_SENDER"
+            }
+          ],
+          "open_actions": [
+            {
+              "action_code": "CONTINUE_OBSERVATION_UNTIL",
+              "due_at": "2026-09-23T18:00:00+08:00",
+              "status": "OPEN"
+            },
+            {
+              "action_code": "AWAIT_TOX_RESULT",
+              "due_at": "2026-09-22T20:00:00+08:00",
+              "status": "OPEN",
+              "detail": "呕吐物 SP-VOM-B-1 留存县医院，待区域中心安排取回送检"
+            },
+            {
+              "action_code": "FOLLOWUP_CLINIC",
+              "due_at": "2026-09-29T09:00:00+08:00",
+              "status": "OPEN"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "EV-046",
+      "event_type": "HANDOFF_ACKNOWLEDGED",
+      "aggregate_type": "care_handoff",
+      "aggregate_id": "HO-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T18:40:00+08:00",
+      "version": 2,
+      "summary": "区域中心确认 B 的资料、留存样本与待办",
+      "payload": {
+        "handoff_id": "HO-B-1",
+        "acknowledged_at": "2026-09-21T18:40:00+08:00",
+        "acknowledged_by": {
+          "receiving_facility_id": "F-REGIONAL-PC",
+          "physician_id": "STAFF-REGIONAL-CHEN"
+        },
+        "confirmations": {
+          "records_received": [
+            {
+              "kind": "EXPOSURE",
+              "event_id": "EV-001",
+              "present": true
+            },
+            {
+              "kind": "COURSE",
+              "event_id": "EV-005",
+              "present": true
+            },
+            {
+              "kind": "SYMPTOM_TIMELINE",
+              "event_id": "EV-011",
+              "present": true
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-014",
+              "present": true
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-026",
+              "present": true
+            },
+            {
+              "kind": "OBSERVATION",
+              "event_id": "EV-044",
+              "present": true
+            },
+            {
+              "kind": "LAB_PANEL",
+              "event_id": "LP-B-1",
+              "present": true
+            }
+          ],
+          "specimens_accounted": [
+            {
+              "specimen_id": "SP-VOM-B-1",
+              "seal_id": "SEAL-B1",
+              "seal_intact": true,
+              "accounted": true,
+              "note": "留存县医院检验科冰箱 B-2，封签完好，09-22 取回"
+            }
+          ],
+          "open_actions_accepted": [
+            {
+              "action_code": "CONTINUE_OBSERVATION_UNTIL",
+              "accepted": true,
+              "due_at": "2026-09-23T18:00:00+08:00"
+            },
+            {
+              "action_code": "AWAIT_TOX_RESULT",
+              "accepted": true,
+              "due_at": "2026-09-22T20:00:00+08:00"
+            },
+            {
+              "action_code": "FOLLOWUP_CLINIC",
+              "accepted": true,
+              "due_at": "2026-09-29T09:00:00+08:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "event_id": "EV-047",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-C-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-21T09:00:00+08:00",
+      "version": 1,
+      "summary": "C 复查肝肾指标正常",
+      "payload": {
+        "patient_id": "P-0920-C",
+        "specimen_id": "SP-BLOOD-C-1",
+        "drawn_at": "2026-09-21T08:30:00+08:00",
+        "facility_id": "F-CITY-02",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 24,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 26,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 58,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 40,
+              "high": 90,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-048",
+      "event_type": "FOLLOWUP_SCHEDULED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-C-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-22T10:00:00+08:00",
+      "version": 1,
+      "summary": "C：解除前预约 09-24 复诊复查肝肾",
+      "payload": {
+        "patient_id": "P-0920-C",
+        "scheduled_for": "2026-09-24T09:00:00+08:00",
+        "facility_id": "F-CITY-02",
+        "reason_codes": [
+          "POST_DISCHARGE",
+          "LIVER_TREND",
+          "KIDNEY_TREND"
+        ],
+        "required_labs": [
+          "ALT",
+          "AST",
+          "Cr"
+        ]
+      }
+    },
+    {
+      "event_id": "EV-049",
+      "event_type": "OBSERVATION_DISCHARGED_MEDICALLY",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-C",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-22T13:00:00+08:00",
+      "version": 4,
+      "summary": "C：达到留观时长、指标平稳，医生医学解除留观",
+      "payload": {
+        "patient_id": "P-0920-C",
+        "state": "MEDICALLY_DISCHARGED",
+        "discharged_at": "2026-09-22T13:00:00+08:00",
+        "discharged_by": {
+          "physician_id": "STAFF-CITY-ZHAO",
+          "facility_id": "F-CITY-02",
+          "e_signature_ref": "ESIGN-CITY-7788"
+        },
+        "medical_basis": {
+          "lab_trend": [
+            {
+              "panel_id": "LP-C-1",
+              "assessment": "NORMAL"
+            }
+          ],
+          "clinical_assessment": "潜伏期大于 6 小时但满 48 小时留观，两轮肝肾指标正常，无症状反复",
+          "observation_hours_met": true
+        },
+        "follow_up_id": "FU-C-1"
+      }
+    },
+    {
+      "event_id": "EV-050",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-A-3",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-22T06:00:00+08:00",
+      "version": 1,
+      "summary": "A：肝酶仍高但较前回落",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "drawn_at": "2026-09-22T05:45:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 260,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 210,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 88,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-051",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-B-2",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-23T07:00:00+08:00",
+      "version": 1,
+      "summary": "B：肝酶明显回落",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "drawn_at": "2026-09-23T06:30:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 150,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 96,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 95,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-052",
+      "event_type": "FOLLOWUP_SCHEDULED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-23T16:00:00+08:00",
+      "version": 1,
+      "summary": "A：解除前预约 09-27 门诊复诊",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "scheduled_for": "2026-09-27T09:00:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "reason_codes": [
+          "POST_DISCHARGE",
+          "LIVER_TREND",
+          "KIDNEY_TREND",
+          "POST_FALSE_RECOVERY"
+        ],
+        "required_labs": [
+          "ALT",
+          "AST",
+          "TBIL",
+          "Cr",
+          "PT",
+          "INR"
+        ]
+      }
+    },
+    {
+      "event_id": "EV-053",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-A-4",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-24T07:00:00+08:00",
+      "version": 1,
+      "summary": "A：肝酶接近正常、凝血稳定",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "drawn_at": "2026-09-24T06:30:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 68,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 55,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "INR",
+            "value": 1.1,
+            "unit": "ratio",
+            "critical": false,
+            "reference_range": {
+              "low": 0.8,
+              "high": 1.2,
+              "critical_high": 2.0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-054",
+      "event_type": "OBSERVATION_DISCHARGED_MEDICALLY",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-A",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-24T10:00:00+08:00",
+      "version": 10,
+      "summary": "A：超过延长留观期限、指标连续改善，医生医学解除",
+      "payload": {
+        "patient_id": "P-0920-A",
+        "state": "MEDICALLY_DISCHARGED",
+        "discharged_at": "2026-09-24T10:00:00+08:00",
+        "discharged_by": {
+          "physician_id": "STAFF-REGIONAL-CHEN",
+          "facility_id": "F-REGIONAL-PC",
+          "e_signature_ref": "ESIGN-REG-3301"
+        },
+        "medical_basis": {
+          "lab_trend": [
+            {
+              "panel_id": "LP-A-3",
+              "assessment": "STABLE"
+            },
+            {
+              "panel_id": "LP-A-4",
+              "assessment": "IMPROVING"
+            }
+          ],
+          "clinical_assessment": "鹅膏毒肽中毒经水飞蓟素与血液净化后肝酶回落、凝血稳定，无症状反复",
+          "observation_hours_met": true
+        },
+        "follow_up_id": "FU-A-1"
+      }
+    },
+    {
+      "event_id": "EV-055",
+      "event_type": "FOLLOWUP_SCHEDULED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-25T09:30:00+08:00",
+      "version": 1,
+      "summary": "B：解除前预约 09-29 复诊（曾自行离院，需重点追踪）",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "scheduled_for": "2026-09-29T09:00:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "reason_codes": [
+          "POST_DISCHARGE",
+          "LIVER_TREND",
+          "LEFT_AGAINST_ADVICE_RECALL"
+        ],
+        "required_labs": [
+          "ALT",
+          "AST",
+          "Cr"
+        ]
+      }
+    },
+    {
+      "event_id": "EV-056",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-B-3",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-25T08:00:00+08:00",
+      "version": 1,
+      "summary": "B：肝酶基本恢复",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "drawn_at": "2026-09-25T07:30:00+08:00",
+        "facility_id": "F-REGIONAL-PC",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 55,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 42,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 81,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 57,
+              "high": 111,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-057",
+      "event_type": "OBSERVATION_DISCHARGED_MEDICALLY",
+      "aggregate_type": "patient_course",
+      "aggregate_id": "CRSE-0920-B",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-25T11:00:00+08:00",
+      "version": 10,
+      "summary": "B：达到延长留观期限且指标改善，医生医学解除（既往自行离院已闭环）",
+      "payload": {
+        "patient_id": "P-0920-B",
+        "state": "MEDICALLY_DISCHARGED",
+        "discharged_at": "2026-09-25T11:00:00+08:00",
+        "discharged_by": {
+          "physician_id": "STAFF-REGIONAL-CHEN",
+          "facility_id": "F-REGIONAL-PC",
+          "e_signature_ref": "ESIGN-REG-3302"
+        },
+        "medical_basis": {
+          "lab_trend": [
+            {
+              "panel_id": "LP-B-2",
+              "assessment": "IMPROVING"
+            },
+            {
+              "panel_id": "LP-B-3",
+              "assessment": "IMPROVING"
+            }
+          ],
+          "clinical_assessment": "假愈期后肝损经治疗恢复，复诊追踪安排到位",
+          "observation_hours_met": true
+        },
+        "follow_up_id": "FU-B-1"
+      }
+    },
+    {
+      "event_id": "EV-058",
+      "event_type": "LAB_PANEL_RECORDED",
+      "aggregate_type": "lab_panel",
+      "aggregate_id": "LP-C-2",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-24T08:40:00+08:00",
+      "version": 1,
+      "summary": "C：复诊抽血，肝肾正常",
+      "payload": {
+        "patient_id": "P-0920-C",
+        "drawn_at": "2026-09-24T08:30:00+08:00",
+        "facility_id": "F-CITY-02",
+        "metrics": [
+          {
+            "code": "ALT",
+            "value": 20,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 7,
+              "high": 40,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "AST",
+            "value": 22,
+            "unit": "U/L",
+            "critical": false,
+            "reference_range": {
+              "low": 13,
+              "high": 35,
+              "critical_high": 400
+            }
+          },
+          {
+            "code": "Cr",
+            "value": 55,
+            "unit": "umol/L",
+            "critical": false,
+            "reference_range": {
+              "low": 40,
+              "high": 90,
+              "critical_high": 300
+            }
+          }
+        ]
+      }
+    },
+    {
+      "event_id": "EV-059",
+      "event_type": "FOLLOWUP_COMPLETED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-C-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-24T09:30:00+08:00",
+      "version": 2,
+      "summary": "C：复诊完成，临床痊愈",
+      "payload": {
+        "follow_up_id": "FU-C-1",
+        "patient_id": "P-0920-C",
+        "completed_at": "2026-09-24T09:30:00+08:00",
+        "lab_panel_id": "LP-C-2",
+        "outcome": {
+          "status": "RESOLVED",
+          "note": "肝肾指标正常，无不适"
+        }
+      }
+    },
+    {
+      "event_id": "EV-060",
+      "event_type": "FOLLOWUP_COMPLETED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-A-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-27T09:40:00+08:00",
+      "version": 2,
+      "summary": "A：复诊完成，肝酶恢复，临床痊愈",
+      "payload": {
+        "follow_up_id": "FU-A-1",
+        "patient_id": "P-0920-A",
+        "completed_at": "2026-09-27T09:40:00+08:00",
+        "outcome": {
+          "status": "RESOLVED",
+          "note": "ALT 40，凝血正常，继续门诊随访建议"
+        }
+      }
+    },
+    {
+      "event_id": "EV-061",
+      "event_type": "FOLLOWUP_COMPLETED",
+      "aggregate_type": "follow_up",
+      "aggregate_id": "FU-B-1",
+      "exposure_id": "EXP-0920-FAM",
+      "occurred_at": "2026-09-29T09:30:00+08:00",
+      "version": 2,
+      "summary": "B：复诊完成，指标恢复，失访风险解除",
+      "payload": {
+        "follow_up_id": "FU-B-1",
+        "patient_id": "P-0920-B",
+        "completed_at": "2026-09-29T09:30:00+08:00",
+        "outcome": {
+          "status": "RESOLVED",
+          "note": "ALT 36，Cr 正常，本人已能正常进食"
+        }
+      }
+    }
+  ]
+}

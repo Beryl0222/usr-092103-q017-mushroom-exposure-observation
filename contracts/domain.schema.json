@@ -1,15 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "毒蘑菇暴露留观领域事件",
+  "$id": "https://poison-center.example/contracts/domain.schema.json",
+  "title": "毒蘑菇暴露留观领域事件契约",
+  "description": "区域中毒救治中心的暴露事件、病程、样本保管、检验、危急值、治疗、留观、转院与复诊的统一交换契约。所有服务在统一身份（exposure_id 贯穿全程）与版本语义下协作。",
   "type": "object",
   "required": [
     "event_id",
     "event_type",
     "aggregate_type",
     "aggregate_id",
+    "exposure_id",
     "occurred_at",
     "version",
-    "summary"
+    "summary",
+    "payload"
   ],
   "properties": {
     "event_id": {
@@ -20,10 +24,30 @@
       "type": "string",
       "enum": [
         "EXPOSURE_REPORTED",
+        "EXPOSURE_MERGED",
+        "COURSE_OPENED",
+        "PERSON_RELATION_LINKED",
         "SYMPTOM_RECORDED",
-        "SPECIMEN_TRANSFERRED",
+        "SYMPTOM_PAUSED",
+        "LAB_PANEL_RECORDED",
+        "CRITICAL_ALERT_RAISED",
+        "CRITICAL_ALERT_ACKNOWLEDGED",
+        "TREATMENT_ORDERED",
+        "OBSERVATION_REQUIRED",
         "OBSERVATION_EXTENDED",
-        "HANDOFF_ACCEPTED"
+        "OBSERVATION_DISCHARGED_MEDICALLY",
+        "OBSERVATION_LEFT_AGAINST_ADVICE",
+        "OBSERVATION_RETURNED",
+        "SPECIMEN_COLLECTED",
+        "SPECIMEN_SPLIT_PREPARED",
+        "SPECIMEN_SEAL_VERIFIED",
+        "SPECIMEN_TRANSFERRED",
+        "SPECIMEN_RECEIVED",
+        "TOXICOLOGY_RESULTED",
+        "HANDOFF_INITIATED",
+        "HANDOFF_ACKNOWLEDGED",
+        "FOLLOWUP_SCHEDULED",
+        "FOLLOWUP_COMPLETED"
       ]
     },
     "aggregate_type": {
@@ -32,25 +56,1121 @@
         "exposure_event",
         "patient_course",
         "specimen_chain",
-        "care_handoff"
+        "care_handoff",
+        "tox_result",
+        "critical_alert",
+        "lab_panel",
+        "follow_up"
       ]
     },
     "aggregate_id": {
       "type": "string",
       "minLength": 1
     },
+    "exposure_id": {
+      "type": "string",
+      "description": "领域契约规定的暴露事件统一编号，串联进食事件、人员、症状、样本、检验、治疗、留观、交接与复诊。",
+      "minLength": 1
+    },
     "occurred_at": {
       "type": "string",
-      "format": "date-time"
+      "format": "date-time",
+      "description": "事件实际发生时间（不是入流时间）。"
     },
     "version": {
       "type": "integer",
       "minimum": 1
     },
+    "source_facility_id": {
+      "type": "string",
+      "description": "最初上报医疗机构编号。多院重复上报时用于合并后溯源。"
+    },
+    "report_batch_id": {
+      "type": "string",
+      "description": "上报批次编号，同一桌餐聚在不同医院的重复上报借此识别与合并。"
+    },
+    "causation_id": {
+      "type": "string",
+      "description": "直接触发本事件的上游事件编号，例如危急值提醒源于 LAB_PANEL_RECORDED。"
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "把一次拆检波次或一次交接包内的多个事件归组。"
+    },
     "summary": {
       "type": "string",
       "minLength": 1
+    },
+    "payload": {
+      "type": "object",
+      "description": "按 event_type 对应的业务数据，见 $defs 中各 *Payload 定义。"
     }
   },
-  "additionalProperties": true
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "event_type": { "const": "EXPOSURE_REPORTED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "exposure_event" },
+          "payload": { "$ref": "#/$defs/exposureReportedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "EXPOSURE_MERGED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "exposure_event" },
+          "payload": { "$ref": "#/$defs/exposureMergedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "COURSE_OPENED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/courseOpenedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "PERSON_RELATION_LINKED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/personRelationLinkedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SYMPTOM_RECORDED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/symptomPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SYMPTOM_PAUSED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/symptomPausedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "LAB_PANEL_RECORDED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "lab_panel" },
+          "payload": { "$ref": "#/$defs/labPanelPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "CRITICAL_ALERT_RAISED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "critical_alert" },
+          "payload": { "$ref": "#/$defs/criticalAlertRaisedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "CRITICAL_ALERT_ACKNOWLEDGED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "critical_alert" },
+          "payload": { "$ref": "#/$defs/criticalAlertAckPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "TREATMENT_ORDERED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/treatmentPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBSERVATION_REQUIRED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/observationStartPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBSERVATION_EXTENDED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/observationExtendPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBSERVATION_DISCHARGED_MEDICALLY" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/medicalDischargePayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBSERVATION_LEFT_AGAINST_ADVICE" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/leftAgainstAdvicePayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "OBSERVATION_RETURNED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "patient_course" },
+          "payload": { "$ref": "#/$defs/observationReturnedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SPECIMEN_COLLECTED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "specimen_chain" },
+          "payload": { "$ref": "#/$defs/specimenCollectedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SPECIMEN_SPLIT_PREPARED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "specimen_chain" },
+          "payload": { "$ref": "#/$defs/specimenSplitPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SPECIMEN_SEAL_VERIFIED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "specimen_chain" },
+          "payload": { "$ref": "#/$defs/sealVerifiedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SPECIMEN_TRANSFERRED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "specimen_chain" },
+          "payload": { "$ref": "#/$defs/specimenTransferredPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "SPECIMEN_RECEIVED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "specimen_chain" },
+          "payload": { "$ref": "#/$defs/specimenReceivedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "TOXICOLOGY_RESULTED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "tox_result" },
+          "payload": { "$ref": "#/$defs/toxResultPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "HANDOFF_INITIATED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "care_handoff" },
+          "payload": { "$ref": "#/$defs/handoffInitiatedPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "HANDOFF_ACKNOWLEDGED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "care_handoff" },
+          "payload": { "$ref": "#/$defs/handoffAckPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "FOLLOWUP_SCHEDULED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "follow_up" },
+          "payload": { "$ref": "#/$defs/followupScheduledPayload" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "FOLLOWUP_COMPLETED" } }, "required": ["event_type"] },
+      "then": {
+        "properties": {
+          "aggregate_type": { "const": "follow_up" },
+          "payload": { "$ref": "#/$defs/followupCompletedPayload" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "facilityRef": { "type": "string", "minLength": 1 },
+    "staffRef": { "type": "string", "minLength": 1 },
+    "patientRef": { "type": "string", "minLength": 1 },
+    "specimenRef": { "type": "string", "minLength": 1 },
+    "observedSymptomStatus": {
+      "enum": ["ACTIVE", "PAUSED", "RESOLVED_MEDICAL"],
+      "description": "PAUSED=症状暂缓（假愈期/自觉好转），不构成结案；RESOLVED_MEDICAL 仅在医学解除留观后承载。"
+    },
+    "observationState": {
+      "enum": [
+        "REQUIRED",
+        "UNDER_OBSERVATION",
+        "EXTENDED",
+        "MEDICALLY_DISCHARGED",
+        "LEFT_AGAINST_ADVICE",
+        "RETURNED_TO_OBSERVATION"
+      ],
+      "description": "症状暂缓不改变留观状态；医学解除留观(MEDICALLY_DISCHARGED)与自行离院(LEFT_AGAINST_ADVICE)是两个不同状态，后者责任不闭环。"
+    },
+    "labMetric": {
+      "type": "object",
+      "required": ["code", "value", "unit", "critical"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": ["ALT", "AST", "TBIL", "Cr", "BUN", "PT", "INR", "CK", "K", "PLT"],
+          "description": "肝肾与凝血相关指标编码。"
+        },
+        "value": { "type": "number" },
+        "unit": { "type": "string", "minLength": 1 },
+        "reference_range": {
+          "type": "object",
+          "properties": {
+            "low": { "type": "number" },
+            "high": { "type": "number" },
+            "critical_high": { "type": "number" }
+          },
+          "additionalProperties": false
+        },
+        "critical": {
+          "type": "boolean",
+          "description": "是否达危急值阈值（由上报端按统一阈值表判定）。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exposureReportedPayload": {
+      "type": "object",
+      "required": ["meal", "reporter_facility_id", "suspected_species"],
+      "properties": {
+        "meal": {
+          "type": "object",
+          "required": ["meal_time", "location"],
+          "properties": {
+            "meal_time": { "type": "string", "format": "date-time" },
+            "location": { "type": "string", "minLength": 1 },
+            "dish_names": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "reporter_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "suspected_species": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "confidence": { "enum": ["CONFIRMED", "SUSPECTED", "UNKNOWN"] }
+          },
+          "additionalProperties": false
+        },
+        "source_trace": {
+          "type": "object",
+          "description": "疾控视角的来源信息（聚集规模与溯源），与临床病历视图分离。",
+          "properties": {
+            "gathering_type": { "enum": ["FAMILY_MEAL", "RESTAURANT", "MARKET", "GATHERING", "OTHER"] },
+            "exposed_count_reported": { "type": "integer", "minimum": 0 },
+            "purchase_site": { "type": "string" },
+            "region_code": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "duplicate_of_exposure_id": {
+          "type": "string",
+          "description": "若该上报疑似同一进食事件的重复上报，填已存在的暴露编号，等待 EXPOSURE_MERGED 正式合并；在此之前独立保存各自记录。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exposureMergedPayload": {
+      "type": "object",
+      "required": ["surviving_exposure_id", "merged_exposure_ids", "merge_basis", "merged_at"],
+      "properties": {
+        "surviving_exposure_id": { "$ref": "#/$defs/nonEmptyId" },
+        "merged_exposure_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyId" },
+          "description": "被合并的多院重复上报编号；其全部原始事件保留，不删除。"
+        },
+        "merge_basis": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["kind", "detail"],
+            "properties": {
+              "kind": { "enum": ["SAME_MEAL_TIME_PLACE", "SAME_SPECIMEN_LINEAGE", "SAME_PATIENT_IDENTITY", "MANUAL_CDC_CONFIRM"] },
+              "detail": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "merged_at": { "type": "string", "format": "date-time" },
+        "decided_by": { "$ref": "#/$defs/staffRef" }
+      },
+      "additionalProperties": false
+    },
+    "courseOpenedPayload": {
+      "type": "object",
+      "required": ["patient", "facility_id"],
+      "properties": {
+        "patient": {
+          "type": "object",
+          "required": ["patient_id", "initials"],
+          "properties": {
+            "patient_id": { "$ref": "#/$defs/patientRef" },
+            "initials": {
+              "type": "string",
+              "minLength": 1,
+              "description": "同桌风险通知等最小必要展示只用首字/代号，不透传完整病历。"
+            },
+            "age": { "type": "integer", "minimum": 0 },
+            "sex": { "enum": ["M", "F", "U"] }
+          },
+          "additionalProperties": false
+        },
+        "facility_id": { "$ref": "#/$defs/facilityRef" },
+        "role_in_meal": {
+          "enum": ["DINER", "COOK", "HANDLER", "OTHER"],
+          "description": "用餐角色；无临床信息，仅支撑同桌风险通知与聚集规模统计。"
+        },
+        "ate_mushroom_dish": { "type": "boolean" },
+        "first_bite_at": { "type": "string", "format": "date-time" },
+        "latent_period_minutes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "潜伏期=首发症状时间-首次进食时间，用于早期分型（如鹅膏毒肽>6h）。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "personRelationLinkedPayload": {
+      "type": "object",
+      "required": ["subject_patient_id", "related_patient_id", "relation", "consent_scope"],
+      "properties": {
+        "subject_patient_id": { "$ref": "#/$defs/patientRef" },
+        "related_patient_id": { "$ref": "#/$defs/patientRef" },
+        "relation": { "enum": ["CO_DINER", "HOUSEHOLD", "EMERGENCY_CONTACT"] },
+        "consent_scope": {
+          "type": "string",
+          "enum": ["CO_DINER_ALERT_ONLY", "FULL_ACCESS"],
+          "description": "CO_DINER_ALERT_ONLY：关联只用于本次风险通知，related 方不能访问 subject 的任何病历数据。"
+        },
+        "alert_message_ref": {
+          "type": "string",
+          "description": "指向预置风险通知模板，不携带病历内容。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "symptomPayload": {
+      "type": "object",
+      "required": ["symptoms", "recorded_by"],
+      "properties": {
+        "symptoms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "status"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "enum": [
+                  "NAUSEA", "VOMITING", "DIARRHEA", "ABDOMINAL_PAIN",
+                  "SWEATING", "LACRIMATION", "MIOSIS", "BRADYCARDIA",
+                  "DELIRIUM", "SEIZURE", "HALLUCINATION",
+                  "JAUNDICE", "OLIGURIA", "FATIGUE"
+                ]
+              },
+              "status": { "$ref": "#/$defs/observedSymptomStatus" },
+              "onset_at": { "type": "string", "format": "date-time" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "recorded_by": { "$ref": "#/$defs/staffRef" },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "symptomPausedPayload": {
+      "type": "object",
+      "required": ["patient_id", "paused_symptoms", "expected_resurgence_window", "recorded_by"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "paused_symptoms": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "expected_resurgence_window": {
+          "type": "object",
+          "required": ["until"],
+          "properties": {
+            "from": { "type": "string", "format": "date-time" },
+            "until": {
+              "type": "string",
+              "format": "date-time",
+              "description": "假愈期预计结束前的重点观察截止时间，不能因患者自觉好转提前解除。"
+            }
+          },
+          "additionalProperties": false
+        },
+        "recorded_by": { "$ref": "#/$defs/staffRef" },
+        "warning_given": {
+          "type": "boolean",
+          "description": "是否已明确告知患者症状暂缓不等于痊愈、不得自行离院。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "labPanelPayload": {
+      "type": "object",
+      "required": ["patient_id", "drawn_at", "facility_id", "metrics"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "specimen_id": {
+          "$ref": "#/$defs/specimenRef",
+          "description": "指标可回溯到具体采样与检验（从任一次指标变化回到采样、检验）。"
+        },
+        "drawn_at": { "type": "string", "format": "date-time" },
+        "facility_id": { "$ref": "#/$defs/facilityRef" },
+        "metrics": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/labMetric" } }
+      },
+      "additionalProperties": false
+    },
+    "criticalAlertRaisedPayload": {
+      "type": "object",
+      "required": ["patient_id", "metric_code", "value", "unit", "threshold", "raised_at", "deliver_to_roles", "auto_close_forbidden"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "lab_panel_id": { "$ref": "#/$defs/nonEmptyId" },
+        "metric_code": { "type": "string" },
+        "value": { "type": "number" },
+        "unit": { "type": "string", "minLength": 1 },
+        "threshold": { "type": "number" },
+        "raised_at": { "type": "string", "format": "date-time" },
+        "deliver_to_roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["ATTENDING_PHYSICIAN", "ON_CALL_POISON_CENTER", "RECEIVING_FACILITY", "CDC_STAFF"] }
+        },
+        "auto_close_forbidden": {
+          "type": "boolean",
+          "description": "提醒只负责及时触达，最终诊疗由医生确认，系统不得自动结案；事件流校验要求必须为 true。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "criticalAlertAckPayload": {
+      "type": "object",
+      "required": ["alert_id", "acknowledged_by", "acknowledged_at", "clinical_decision"],
+      "properties": {
+        "alert_id": { "$ref": "#/$defs/nonEmptyId" },
+        "acknowledged_by": { "$ref": "#/$defs/staffRef" },
+        "acknowledged_at": { "type": "string", "format": "date-time" },
+        "clinical_decision": {
+          "type": "object",
+          "required": ["decision"],
+          "properties": {
+            "decision": {
+              "enum": ["CONTINUE_OBSERVATION", "EXTEND_OBSERVATION", "ESCALATE_CARE", "TRANSFER", "DEEM_FALSE_ALARM"],
+              "description": "DEEM_FALSE_ALARM 也必须由医生显式做出，不允许系统代为解除。"
+            },
+            "note": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "treatmentPayload": {
+      "type": "object",
+      "required": ["patient_id", "orders", "ordered_by", "ordered_at"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "orders": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["code", "status"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "GASTRIC_LAVAGE", "ACTIVATED_CHARCOAL", "IV_FLUID",
+                  "SILIBININ", "PENICILLIN_G", "NAC", "BLOOD_PURIFICATION",
+                  "LIVER_TRANSPLANT_EVAL", "SYMPTOMATIC"
+                ]
+              },
+              "status": { "enum": ["ORDERED", "STARTED", "COMPLETED", "HELD"] },
+              "started_at": { "type": "string", "format": "date-time" },
+              "dose": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "ordered_by": { "$ref": "#/$defs/staffRef" },
+        "ordered_at": { "type": "string", "format": "date-time" },
+        "based_on_lab_panel_id": { "$ref": "#/$defs/nonEmptyId" },
+        "based_on_tox_result_id": { "$ref": "#/$defs/nonEmptyId" }
+      },
+      "additionalProperties": false
+    },
+    "observationStartPayload": {
+      "type": "object",
+      "required": ["patient_id", "state", "required_until", "set_by"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "state": {
+          "enum": ["REQUIRED", "UNDER_OBSERVATION"]
+        },
+        "required_until": {
+          "type": "string",
+          "format": "date-time",
+          "description": "留观最早可评估解除时间；早于该时间不得医学解除。"
+        },
+        "observing_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "rationale": {
+          "type": "array",
+          "items": { "enum": ["LATENT_OVER_6H_RISK", "SUSPECTED_AMANITIN", "CRITICAL_LAB", "MULTI_ORGAN_RISK", "CO_DINER_SEVERE_CASE"] }
+        },
+        "set_by": { "$ref": "#/$defs/staffRef" }
+      },
+      "additionalProperties": false
+    },
+    "observationExtendPayload": {
+      "type": "object",
+      "required": ["patient_id", "state", "previous_until", "extended_until", "reason", "set_by"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "state": { "const": "EXTENDED" },
+        "previous_until": { "type": "string", "format": "date-time" },
+        "extended_until": { "type": "string", "format": "date-time" },
+        "reason": {
+          "type": "object",
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["LAB_WORSENING", "TOX_POSITIVE", "FALSE_RECOVERY_WINDOW", "CRITICAL_ALERT", "PHYSICIAN_JUDGMENT"] },
+            "ref_event_id": { "type": "string" },
+            "detail": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "set_by": { "$ref": "#/$defs/staffRef" }
+      },
+      "additionalProperties": false
+    },
+    "medicalDischargePayload": {
+      "type": "object",
+      "required": ["patient_id", "state", "discharged_at", "discharged_by", "medical_basis"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "state": { "const": "MEDICALLY_DISCHARGED" },
+        "discharged_at": { "type": "string", "format": "date-time" },
+        "discharged_by": {
+          "type": "object",
+          "required": ["physician_id", "facility_id"],
+          "properties": {
+            "physician_id": { "$ref": "#/$defs/staffRef" },
+            "facility_id": { "$ref": "#/$defs/facilityRef" },
+            "e_signature_ref": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "medical_basis": {
+          "type": "object",
+          "required": ["lab_trend", "clinical_assessment"],
+          "properties": {
+            "lab_trend": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["panel_id", "assessment"],
+                "properties": {
+                  "panel_id": { "type": "string", "minLength": 1 },
+                  "assessment": { "enum": ["NORMAL", "IMPROVING", "STABLE"] }
+                },
+                "additionalProperties": false
+              }
+            },
+            "clinical_assessment": { "type": "string", "minLength": 1 },
+            "observation_hours_met": {
+              "type": "boolean",
+              "description": "是否已达到要求的留观时长（含假愈期窗口）。"
+            }
+          },
+          "additionalProperties": false
+        },
+        "follow_up_id": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "leftAgainstAdvicePayload": {
+      "type": "object",
+      "required": ["patient_id", "state", "left_at", "warning_delivered", "open_liability"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "state": { "const": "LEFT_AGAINST_ADVICE" },
+        "left_at": { "type": "string", "format": "date-time" },
+        "warning_delivered": {
+          "type": "object",
+          "required": ["contents", "delivered_by"],
+          "properties": {
+            "contents": {
+              "type": "array",
+              "items": { "enum": ["FALSE_RECOVERY_EXPLAINED", "RETURN_IF_SYMPTOMS_RETURN", "LIVER_KIDNEY_RISK", "FOLLOWUP_OBLIGATION"] }
+            },
+            "delivered_by": { "$ref": "#/$defs/staffRef" },
+            "signed_ref": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "open_liability": {
+          "type": "object",
+          "required": ["observation_still_due", "followup_still_due", "contact_plan"],
+          "properties": {
+            "observation_still_due": { "const": true },
+            "followup_still_due": { "const": true },
+            "contact_plan": {
+              "type": "object",
+              "required": ["channel", "next_attempt_at"],
+              "properties": {
+                "channel": { "enum": ["PHONE", "SMS", "COMMUNITY_HEALTH", "CDC_FIELD"] },
+                "next_attempt_at": { "type": "string", "format": "date-time" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "observationReturnedPayload": {
+      "type": "object",
+      "required": ["patient_id", "state", "returned_at", "facility_id"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "state": { "const": "RETURNED_TO_OBSERVATION" },
+        "returned_at": { "type": "string", "format": "date-time" },
+        "facility_id": { "$ref": "#/$defs/facilityRef" },
+        "trigger": {
+          "type": "object",
+          "properties": {
+            "kind": { "enum": ["SYMPTOM_RESURGENCE", "RECALL_SUCCESS", "CRITICAL_LAB", "SELF_RETURN"] },
+            "ref_event_id": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "specimenCollectedPayload": {
+      "type": "object",
+      "required": ["specimen_id", "patient_id", "material", "collected_at", "facility_id", "seal"],
+      "properties": {
+        "specimen_id": { "$ref": "#/$defs/specimenRef" },
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "material": {
+          "enum": ["BLOOD", "URINE", "VOMITUS", "LEFTOVER_MUSHROOM", "REMAINING_FOOD", "SWAB", "HAIR_NAIL"]
+        },
+        "collected_at": { "type": "string", "format": "date-time" },
+        "facility_id": { "$ref": "#/$defs/facilityRef" },
+        "seal": {
+          "type": "object",
+          "required": ["seal_id", "sealed_by", "seal_intact_at_collection"],
+          "properties": {
+            "seal_id": { "type": "string", "minLength": 1 },
+            "sealed_by": { "$ref": "#/$defs/staffRef" },
+            "seal_intact_at_collection": { "type": "boolean" },
+            "photo_ref": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "parent_specimen_id": {
+          "type": "string",
+          "description": "若由剩余蘑菇/呕吐物等共同来源采集，可指向同一来源标本以建立谱系。"
+        }
+      },
+      "additionalProperties": false
+    },
+    "specimenSplitPayload": {
+      "type": "object",
+      "required": ["parent_specimen_id", "child_specimens", "split_at", "split_by"],
+      "properties": {
+        "parent_specimen_id": { "$ref": "#/$defs/specimenRef" },
+        "child_specimens": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["specimen_id", "purpose", "seal"],
+            "properties": {
+              "specimen_id": { "$ref": "#/$defs/specimenRef" },
+              "purpose": {
+                "enum": ["LOCAL_LAB", "REGIONAL_TOX_LAB", "CDC_REFERENCE", "RETAIN_ALIQUOT"]
+              },
+              "seal": {
+                "type": "object",
+                "required": ["seal_id", "sealed_by"],
+                "properties": {
+                  "seal_id": { "type": "string", "minLength": 1 },
+                  "sealed_by": { "$ref": "#/$defs/staffRef" },
+                  "photo_ref": { "type": "string" }
+                },
+                "additionalProperties": false
+              },
+              "volume_or_mass": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "split_at": { "type": "string", "format": "date-time" },
+        "split_by": { "$ref": "#/$defs/staffRef" }
+      },
+      "additionalProperties": false
+    },
+    "sealVerifiedPayload": {
+      "type": "object",
+      "required": ["specimen_id", "seal_id", "intact", "verified_at", "verified_by"],
+      "properties": {
+        "specimen_id": { "$ref": "#/$defs/specimenRef" },
+        "seal_id": { "type": "string", "minLength": 1 },
+        "intact": { "type": "boolean" },
+        "verified_at": { "type": "string", "format": "date-time" },
+        "verified_by": { "$ref": "#/$defs/staffRef" },
+        "discrepancy": {
+          "type": "object",
+          "properties": {
+            "kind": { "enum": ["SEAL_BROKEN", "SEAL_MISMATCH", "LABEL_MISMATCH", "TAMPER_EVIDENCE"] },
+            "note": { "type": "string" },
+            "quarantine_specimen": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "specimenTransferredPayload": {
+      "type": "object",
+      "required": ["specimen_ids", "from_facility_id", "to_facility_id", "transferred_at", "transferred_by", "seal_ids", "carrier"],
+      "properties": {
+        "specimen_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/specimenRef" } },
+        "from_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "to_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "transferred_at": { "type": "string", "format": "date-time" },
+        "transferred_by": { "$ref": "#/$defs/staffRef" },
+        "seal_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "转运时核对的全部封签编号；收件方必须逐一 SPECIMEN_SEAL_VERIFIED。"
+        },
+        "carrier": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "enum": ["MEDICAL_LOGISTICS", "STAFF_HANDCARRY", "CDC_COURIER"] },
+            "tracking_no": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "specimenReceivedPayload": {
+      "type": "object",
+      "required": ["specimen_ids", "receiving_facility_id", "received_at", "received_by", "seal_checks"],
+      "properties": {
+        "specimen_ids": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/specimenRef" } },
+        "receiving_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "received_at": { "type": "string", "format": "date-time" },
+        "received_by": { "$ref": "#/$defs/staffRef" },
+        "seal_checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["specimen_id", "seal_id", "intact"],
+            "properties": {
+              "specimen_id": { "$ref": "#/$defs/specimenRef" },
+              "seal_id": { "type": "string", "minLength": 1 },
+              "intact": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "toxResultPayload": {
+      "type": "object",
+      "required": ["specimen_id", "results", "reported_at", "lab_facility_id"],
+      "properties": {
+        "specimen_id": { "$ref": "#/$defs/specimenRef" },
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["analyte", "detected", "method"],
+            "properties": {
+              "analyte": {
+                "type": "string",
+                "enum": [
+                  "AMATOXIN_ALPHA_AMANITIN", "AMATOXIN_BETA_AMANITIN", "PHALLATOXIN",
+                  "MUSCARINE", "IBOTENIC_ACID", "MUSCIMOL",
+                  "PSILOCYBIN", "GYROMITRIN_MMH", "ORELLANINE", "COPRINE", "UNKNOWN_TOXIN"
+                ]
+              },
+              "detected": { "type": "boolean" },
+              "concentration": { "type": "string" },
+              "method": {
+                "enum": ["LC_MS_MS", "HPLC", "GC_MS", "IMMUNOASSAY", "MORPHOLOGY", "PCR_SEQUENCE"]
+              },
+              "result_status": { "enum": ["PRELIMINARY", "CONFIRMED"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "reported_at": { "type": "string", "format": "date-time" },
+        "lab_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "lineage": {
+          "type": "object",
+          "description": "结果谱系：本结果可追溯到母体样本、拆检分支与封签。",
+          "required": ["root_specimen_id", "seal_id"],
+          "properties": {
+            "root_specimen_id": { "$ref": "#/$defs/specimenRef" },
+            "parent_specimen_id": { "$ref": "#/$defs/specimenRef" },
+            "seal_id": { "type": "string", "minLength": 1 },
+            "split_batch_correlation_id": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "handoffInitiatedPayload": {
+      "type": "object",
+      "required": ["handoff_id", "patient_id", "from_facility_id", "to_facility_id", "initiated_at", "package"],
+      "properties": {
+        "handoff_id": { "$ref": "#/$defs/nonEmptyId" },
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "from_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "to_facility_id": { "$ref": "#/$defs/facilityRef" },
+        "initiated_at": { "type": "string", "format": "date-time" },
+        "reason": { "enum": ["SPECIALIST_CENTER", "BLOOD_PURIFICATION", "PATIENT_REQUEST", "CAPACITY", "CRITICAL_ESCALATION"] },
+        "package": {
+          "type": "object",
+          "required": ["records", "specimens", "open_actions"],
+          "properties": {
+            "records": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["kind", "event_id"],
+                "properties": {
+                  "kind": {
+                    "enum": ["EXPOSURE", "COURSE", "SYMPTOM_TIMELINE", "LAB_PANEL", "TOX_RESULT", "TREATMENT", "OBSERVATION", "CDC_SOURCE"]
+                  },
+                  "event_id": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": false
+              }
+            },
+            "specimens": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["specimen_id", "seal_id", "status"],
+                "properties": {
+                  "specimen_id": { "$ref": "#/$defs/specimenRef" },
+                  "seal_id": { "type": "string", "minLength": 1 },
+                  "status": { "enum": ["IN_TRANSIT", "RETAINED_AT_SENDER", "RESULT_PENDING", "RESULTED"] }
+                },
+                "additionalProperties": false
+              }
+            },
+            "open_actions": {
+              "type": "array",
+              "description": "未完成的留观责任与待办（含离院未归、待复查、待出毒理报告、待复诊）。",
+              "items": {
+                "type": "object",
+                "required": ["action_code", "due_at", "status"],
+                "properties": {
+                  "action_code": {
+                    "enum": [
+                      "CONTINUE_OBSERVATION_UNTIL",
+                      "REPEAT_LIVER_KIDNEY_LABS",
+                      "AWAIT_TOX_RESULT",
+                      "RECALL_LEFT_PATIENT",
+                      "FOLLOWUP_CLINIC",
+                      "ACK_CRITICAL_ALERT"
+                    ]
+                  },
+                  "due_at": { "type": "string", "format": "date-time" },
+                  "status": { "enum": ["OPEN", "IN_PROGRESS", "DONE"] },
+                  "detail": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "handoffAckPayload": {
+      "type": "object",
+      "required": ["handoff_id", "acknowledged_at", "acknowledged_by", "confirmations"],
+      "properties": {
+        "handoff_id": { "$ref": "#/$defs/nonEmptyId" },
+        "acknowledged_at": { "type": "string", "format": "date-time" },
+        "acknowledged_by": {
+          "type": "object",
+          "required": ["receiving_facility_id", "physician_id"],
+          "properties": {
+            "receiving_facility_id": { "$ref": "#/$defs/facilityRef" },
+            "physician_id": { "$ref": "#/$defs/staffRef" }
+          },
+          "additionalProperties": false
+        },
+        "confirmations": {
+          "type": "object",
+          "required": ["records_received", "specimens_accounted", "open_actions_accepted"],
+          "properties": {
+            "records_received": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["kind", "event_id", "present"],
+                "properties": {
+                  "kind": { "type": "string" },
+                  "event_id": { "type": "string", "minLength": 1 },
+                  "present": { "type": "boolean" },
+                  "missing_reason": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            },
+            "specimens_accounted": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["specimen_id", "seal_id", "seal_intact", "accounted"],
+                "properties": {
+                  "specimen_id": { "$ref": "#/$defs/specimenRef" },
+                  "seal_id": { "type": "string", "minLength": 1 },
+                  "seal_intact": { "type": "boolean" },
+                  "accounted": { "type": "boolean" },
+                  "note": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            },
+            "open_actions_accepted": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["action_code", "accepted", "due_at"],
+                "properties": {
+                  "action_code": { "type": "string" },
+                  "accepted": { "type": "boolean" },
+                  "due_at": { "type": "string", "format": "date-time" },
+                  "decline_reason": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "followupScheduledPayload": {
+      "type": "object",
+      "required": ["patient_id", "scheduled_for", "facility_id", "reason_codes"],
+      "properties": {
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "scheduled_for": { "type": "string", "format": "date-time" },
+        "facility_id": { "$ref": "#/$defs/facilityRef" },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "enum": ["POST_FALSE_RECOVERY", "LIVER_TREND", "KIDNEY_TREND", "POST_DISCHARGE", "LEFT_AGAINST_ADVICE_RECALL"]
+          }
+        },
+        "required_labs": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "followupCompletedPayload": {
+      "type": "object",
+      "required": ["follow_up_id", "patient_id", "completed_at", "outcome"],
+      "properties": {
+        "follow_up_id": { "$ref": "#/$defs/nonEmptyId" },
+        "patient_id": { "$ref": "#/$defs/patientRef" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "lab_panel_id": { "type": "string" },
+        "outcome": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "enum": ["RESOLVED", "RE_OBSERVATION", "READMITTED", "LOST_TO_FOLLOWUP"] },
+            "note": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
 }

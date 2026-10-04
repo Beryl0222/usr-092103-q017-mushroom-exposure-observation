@@ -1,5 +1,5 @@
 [project]
 name = "domain-event-contract"
-version = "0.1.0"
-description = "领域事件基础校验"
+version = "0.2.0"
+description = "毒蘑菇暴露留观领域事件契约与事件流不变量校验"
 requires-python = ">=3.11"

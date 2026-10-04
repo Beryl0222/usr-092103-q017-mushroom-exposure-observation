@@ -1,9 +1,23 @@
 {
-  "event_id": "092103-017-sample-001",
+  "event_id": "EV-SAMPLE-001",
   "event_type": "EXPOSURE_REPORTED",
   "aggregate_type": "exposure_event",
-  "aggregate_id": "mushroom_exposure_observation-001",
-  "occurred_at": "2026-09-20T16:00:00+08:00",
+  "aggregate_id": "EXP-0920-SAMPLE",
+  "exposure_id": "EXP-0920-SAMPLE",
+  "occurred_at": "2026-09-20T20:10:00+08:00",
   "version": 1,
-  "summary": "毒蘑菇暴露留观联调样例"
+  "source_facility_id": "F-COUNTY-01",
+  "summary": "家庭聚餐疑似毒蘑菇暴露，最小联调样例",
+  "payload": {
+    "meal": {
+      "meal_time": "2026-09-20T12:00:00+08:00",
+      "location": "某省某市某镇团结村3组",
+      "dish_names": ["自采野生菌炒肉", "菌汤"]
+    },
+    "reporter_facility_id": "F-COUNTY-01",
+    "suspected_species": {
+      "name": "疑似鹅膏属（白毒伞）",
+      "confidence": "SUSPECTED"
+    }
+  }
 }
